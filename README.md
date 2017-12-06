@@ -3,6 +3,8 @@ Python/Flask simple web api. This API manage the following resources:
 
 * messages : Information about a specific message (duration, date, category, etc.)
 
+* messageCategories: CategoryName and relationship with messages
+
 
 ## Requirements
 
