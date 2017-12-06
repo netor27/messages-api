@@ -17,16 +17,17 @@ Python/Flask simple web api. This API manage the following resources:
 * Create your virtual environment.
 
 ```
-python3 -m venv ~/Envs/messages-api01/
+python3 -m venv ./env/messages-api
 ```
 * Activate your virtual environment. 
 
 ```
-source ~/Envs/messages-api01/bin/activate
+source ./env/messages-api/bin/activate
 ```
 
 * Install dependencies
 ```
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
@@ -57,6 +58,7 @@ python3 api/migrate.py db upgrade
 ## Running the API
 
 ```
+source ./env/messages-api/bin/activate
 python3 api/api.py
 ```
 
