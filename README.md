@@ -58,6 +58,6 @@ python3 api/migrate.py db upgrade
 python3 api/api.py
 ```
 
-## Consume the API
+## Consuming the API
 
 The API is running by default in the port 5000.
