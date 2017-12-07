@@ -64,4 +64,4 @@ python3 api/api.py
 
 ## Consuming the API
 
-The API is running by default in the port 5000.
+The API is running by default in the port 5000
