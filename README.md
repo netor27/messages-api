@@ -51,8 +51,8 @@ ALTER USER user_name CREATEDB;
 
 * Initialize the db via migration
 ```
-python3 api/migrate.py db migrate
 python3 api/migrate.py db upgrade
+python3 api/migrate.py db migrate
 ```
 
 ## Running the API
