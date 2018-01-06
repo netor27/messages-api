@@ -55,6 +55,22 @@ python3 api/migrate.py db upgrade
 python3 api/migrate.py db migrate
 ```
 
+## Setting up the unit test environment
+
+* Create a database in PostgreSQL, login as the default user (set YOUR_TEST_DB_NAME to your desired new db name)
+```
+sudo -u postgres createdb YOUR_TEST_DB_NAME
+sudo -u postgres -i
+```
+
+* Run the psql client and set the privileges to our previously created user to manage the new db. (set user_name to your user and YOUR_TEST_DB_NAME to your test database name)
+
+```
+psql
+
+GRANT ALL PRIVILEGES ON DATABASE YOUR_TEST_DB_NAME TO user_name;
+```
+
 ## Running the API
 
 ```
