@@ -62,6 +62,4 @@ source ./env/messages-api/bin/activate
 python3 api/run.py
 ```
 
-## Consuming the API
-
 The API is running by default in the port 5000
