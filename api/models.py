@@ -3,8 +3,10 @@ from marshmallow import validate
 from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 
+
 db = SQLAlchemy()
 ma = Marshmallow()
+
 
 class AddUpdateDelete():   
     def add(self, resource):
@@ -34,16 +36,16 @@ class Message(db.Model, AddUpdateDelete):
         self.duration = duration
         self.category = category
 
-    
     @classmethod
     def is_unique(cls, id, message):
         existing_message = cls.query.filter_by(message=message).first()
         if existing_message is None:
             return True
-        elif existing_message.id == id:
-            return True
         else:
-            return False
+            if existing_message.id == id:
+                return True
+            else:
+                return False
 
 
 class Category(db.Model, AddUpdateDelete):
@@ -58,10 +60,11 @@ class Category(db.Model, AddUpdateDelete):
         existing_category = cls.query.filter_by(name=name).first()
         if existing_category is None:
             return True
-        elif existing_category.id == id:
-            return True
         else:
-            return False   
+            if existing_category.id == id:
+                return True
+            else:
+                return False
 
 
 class CategorySchema(ma.Schema):

@@ -3,6 +3,7 @@ from flask_restful import Api, Resource
 from models import db, Category, CategorySchema, Message, MessageSchema
 from sqlalchemy.exc import SQLAlchemyError
 import status
+from helpers import PaginationHelper
 
 
 api_bp = Blueprint('api', __name__)
@@ -21,7 +22,7 @@ class MessageResource(Resource):
         message = Message.query.get_or_404(id)
         message_dict = request.get_json(force=True)
         if 'message' in message_dict:
-            message_message = message_dict['message']
+            message_message = message_dict['message'] 
             if Message.is_unique(id=id, message=message_message):
                 message.message = message_message
             else:
@@ -37,7 +38,6 @@ class MessageResource(Resource):
         if dump_errors:
             return dump_errors, status.HTTP_400_BAD_REQUEST
         validate_errors = message_schema.validate(dumped_message)
-        #errors = message_schema.validate(data)
         if validate_errors:
             return validate_errors, status.HTTP_400_BAD_REQUEST
         try:
@@ -45,7 +45,7 @@ class MessageResource(Resource):
             return self.get(id)
         except SQLAlchemyError as e:
                 db.session.rollback()
-                resp = jsonify({"error": str(e)})
+                resp = {"error": str(e)}
                 return resp, status.HTTP_400_BAD_REQUEST
          
     def delete(self, id):
@@ -62,8 +62,13 @@ class MessageResource(Resource):
 
 class MessageListResource(Resource):
     def get(self):
-        messages = Message.query.all()
-        result = message_schema.dump(messages, many=True).data
+        pagination_helper = PaginationHelper(
+            request,
+            query=Message.query,
+            resource_for_url='api.messagelistresource',
+            key_name='results',
+            schema=message_schema)
+        result = pagination_helper.paginate_query()
         return result
 
     def post(self):
@@ -74,12 +79,10 @@ class MessageListResource(Resource):
         errors = message_schema.validate(request_dict)
         if errors:
             return errors, status.HTTP_400_BAD_REQUEST
-
         message_message = request_dict['message']
         if not Message.is_unique(id=0, message=message_message):
             response = {'error': 'A message with the same message already exists'}
             return response, status.HTTP_400_BAD_REQUEST
-
         try:
             category_name = request_dict['category']['name']
             category = Category.query.filter_by(name=category_name).first()
@@ -90,7 +93,7 @@ class MessageListResource(Resource):
             # Now that we are sure we have a category
             # create a new Message
             message = Message(
-                message=request_dict['message'],
+                message=message_message,
                 duration=request_dict['duration'],
                 category=category)
             message.add(message)
@@ -99,7 +102,7 @@ class MessageListResource(Resource):
             return result, status.HTTP_201_CREATED
         except SQLAlchemyError as e:
             db.session.rollback()
-            resp = jsonify({"error": str(e)})
+            resp = {"error": str(e)}
             return resp, status.HTTP_400_BAD_REQUEST
 
 
@@ -120,7 +123,7 @@ class CategoryResource(Resource):
             return errors, status.HTTP_400_BAD_REQUEST
         try:
             if 'name' in category_dict:
-                category_name = category_dict['name']
+                category_name = category_dict['name'] 
                 if Category.is_unique(id=id, name=category_name):
                     category.name = category_name
                 else:
@@ -130,7 +133,7 @@ class CategoryResource(Resource):
             return self.get(id)
         except SQLAlchemyError as e:
                 db.session.rollback()
-                resp = jsonify({"error": str(e)})
+                resp = {"error": str(e)}
                 return resp, status.HTTP_400_BAD_REQUEST
          
     def delete(self, id):
@@ -151,7 +154,7 @@ class CategoryListResource(Resource):
         results = category_schema.dump(categories, many=True).data
         return results
 
-    def post  (self):
+    def post(self):
         request_dict = request.get_json()
         if not request_dict:
             resp = {'message': 'No input data provided'}
@@ -162,16 +165,16 @@ class CategoryListResource(Resource):
         category_name = request_dict['name']
         if not Category.is_unique(id=0, name=category_name):
             response = {'error': 'A category with the same name already exists'}
-            return response, status.HTTP_400_BAD_REQUEST        
-        try:
-            category = Category(request_dict['name'])
+            return response, status.HTTP_400_BAD_REQUEST
+        try: 
+            category = Category(category_name)
             category.add(category)
             query = Category.query.get(category.id)
             result = category_schema.dump(query).data
             return result, status.HTTP_201_CREATED
         except SQLAlchemyError as e:
             db.session.rollback()
-            resp = jsonify({"error": str(e)})
+            resp = {"error": str(e)}  
             return resp, status.HTTP_400_BAD_REQUEST
 
 

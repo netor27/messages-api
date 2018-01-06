@@ -59,7 +59,7 @@ python3 api/migrate.py db migrate
 
 ```
 source ./env/messages-api/bin/activate
-python3 api/api.py
+python3 api/run.py
 ```
 
 ## Consuming the API

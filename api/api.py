@@ -12,7 +12,7 @@ class MessageManager():
         self.messages = {}
 
     def insert_message(self, message):
-        self.__class__.last_id += 1
+        self.__class__  .last_id += 1
         message.id = self.__class__.last_id
         self.messages[self.__class__.last_id] = message
 
@@ -33,7 +33,6 @@ message_fields = {
     'printed_times': fields.Integer,
     'printed_once': fields.Boolean
 }
-
 
 
 message_manager = MessageManager()
@@ -106,4 +105,5 @@ api.add_resource(Message, '/api/messages/<int:id>', endpoint='message_endpoint')
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', debug=True)
+

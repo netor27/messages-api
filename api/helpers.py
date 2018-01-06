@@ -39,4 +39,6 @@ class PaginationHelper():
             self.key_name: dumped_objects,
             'previous': previous_page_url,
             'next': next_page_url,
-            
+            'count': paginated_objects.total
+        })
+
