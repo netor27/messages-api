@@ -71,6 +71,21 @@ psql
 GRANT ALL PRIVILEGES ON DATABASE YOUR_TEST_DB_NAME TO user_name;
 ```
 
+## Running unit tests
+
+* Use nose2 to run the tests from the api subfolder and creating an html report
+
+```
+cd api
+nose2 -v --with-coverage
+coverage report -m
+coverage html
+```
+The report for the last run is located relatively from the api folder in ./htmlcov/index.html'
+
+
+
+
 ## Running the API
 
 ```
