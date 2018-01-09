@@ -1,3 +1,9 @@
+[![Python](https://img.shields.io/badge/python-3.5.2-blue.svg)]()
+[![Requirements Status](https://requires.io/github/netor27/messages-api/requirements.svg?branch=master)](https://requires.io/github/netor27/messages-api/requirements/?branch=master)
+[![Travis](https://travis-ci.org/netor27/messages-api.svg?branch=master)](https://travis-ci.org/netor27/messages-api)
+[![Coverage](https://codecov.io/gh/netor27/messages-api/branch/master/graph/badge.svg)](https://codecov.io/gh/netor27/messages-api)
+
+
 # messages-api
 Python/Flask simple web api. This API manage the following resources:
 
