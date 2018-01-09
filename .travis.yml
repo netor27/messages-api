@@ -17,5 +17,5 @@ services: docker
 install: docker-compose -f docker-compose.tests.yml build
 
 script: 
-- docker-compose -f docker-compose.tests.yml run --exit-code-from test test 
+- docker-compose -f docker-compose.tests.yml --exit-code-from test test run 
 - /bin/bash -c "curl -s https://codecov.io/env -o cc_env.sh; bash cc_env.sh; python -m pytest --cov=web/ tests; curl -s https://codecov.io/bash -o cc_bash.sh; bash cc_bash.sh -t 3f3db595-a52d-4a08-8707-abab11425024"
