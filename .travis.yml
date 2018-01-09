@@ -1,0 +1,12 @@
+sudo: required
+
+language: python
+cache: pip
+python:
+- '2.7'
+- '3.5'
+- '3.6-dev'
+
+services: docker
+install: docker-compose -f test.yml build
+script: docker-compose -f test.yml run test /bin/bash -c "curl -s https://codecov.io/env -o cc_env.sh; bash cc_env.sh; python -m pytest --cov=web/ tests; curl -s https://codecov.io/bash -o cc_bash.sh; bash cc_bash.sh -t 3f3db595-a52d-4a08-8707-abab11425024"

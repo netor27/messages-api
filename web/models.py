@@ -5,10 +5,8 @@ from flask_marshmallow import Marshmallow
 from passlib.apps import custom_app_context as password_context
 import re
 
-
 db = SQLAlchemy()
 ma = Marshmallow()
-
 
 class AddUpdateDelete():   
     def add(self, resource):

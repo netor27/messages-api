@@ -1,13 +1,13 @@
+from .status import status
+
 from flask import Blueprint, request, jsonify, make_response
 from flask_restful import Api, Resource
-from models import db, Category, CategorySchema, Message, MessageSchema
 from sqlalchemy.exc import SQLAlchemyError
-import status
-from helpers import PaginationHelper
 from flask_httpauth import HTTPBasicAuth
 from flask import g
-from models import User, UserSchema
 
+from .models import db, Category, CategorySchema, Message, MessageSchema, User, UserSchema
+from .helpers import PaginationHelper
 
 auth = HTTPBasicAuth()
 

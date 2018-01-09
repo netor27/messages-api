@@ -1,14 +1,14 @@
-from app import create_app
+from web import create_app
 from base64 import b64encode
 from flask import current_app, json, url_for
-from models import db, Category, Message, User
-import status
+from web.status import status
+from web.models import db, Category,Message, User
 from unittest import TestCase
 
 
 class InitialTests(TestCase):
     def setUp(self):
-        self.app = create_app('test_config')
+        self.app = create_app('config')
         self.test_client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()

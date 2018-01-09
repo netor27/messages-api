@@ -1,0 +1,25 @@
+# Image 'test' uses Testfile to run `pytest --cov=web/ tests` via travis-ci
+test:
+  build: .
+  dockerfile: Testfile
+  links:
+    - database
+    - web
+    
+web:
+  build: .
+  dockerfile: Dockerfile
+  links:
+    - database
+  ports:
+    - "5000"
+
+database:
+  image: postgres
+  restart: always
+  environment:
+    POSTGRES_USER: apiuser
+    POSTGRES_PASSWORD: password
+    POSTGRES_DB: messages
+  expose:
+    - 5432
