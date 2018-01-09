@@ -37,21 +37,25 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-* Create a database in PostgreSQL, login as the default user (set YOUR_DB_NAME to your desired new db name)
+## Create a PostgreSQL database
+
+* Create a database in PostgreSQL, login as the default user (set messages to your desired new db name)
 ```
-sudo -u postgres createdb YOUR_DB_NAME
+sudo -u postgres createdb messages
 sudo -u postgres -i
 ```
 
-* Run the psql client and create a new user with a role to manage the new db. (set user_name to your user and YOUR_DB_NAME to your database name)
+* Run the psql client and create a new user with a role to manage the new db. (set 'apiuser' to your user, 'password' to your password and 'messages' to your database name)
 
 ```
 psql
 
-CREATE ROLE user_name WITH LOGIN PASSWORD 'your_password';
-GRANT ALL PRIVILEGES ON DATABASE YOUR_DB_NAME TO user_name; 
-ALTER USER user_name CREATEDB;
+CREATE ROLE apiuser WITH LOGIN PASSWORD 'passowrd';
+GRANT ALL PRIVILEGES ON DATABASE messages TO apiuser; 
+ALTER USER apiuser CREATEDB;
 ```
+
+## Setting up the database schema
 
 * Update the contents of config.py to match the values you used to create your db and your user name.
 
@@ -63,18 +67,18 @@ python3 api/migrate.py db migrate
 
 ## Setting up the unit test environment
 
-* Create a database in PostgreSQL, login as the default user (set YOUR_TEST_DB_NAME to your desired new db name)
+* Create a database in PostgreSQL, login as the default user (set 'test_mesages' to your desired new db name)
 ```
-sudo -u postgres createdb YOUR_TEST_DB_NAME
+sudo -u postgres createdb 'test_messages'
 sudo -u postgres -i
 ```
 
-* Run the psql client and set the privileges to our previously created user to manage the new db. (set user_name to your user and YOUR_TEST_DB_NAME to your test database name)
+* Run the psql client and set the privileges to our previously created user to manage the new db. 
 
 ```
 psql
 
-GRANT ALL PRIVILEGES ON DATABASE YOUR_TEST_DB_NAME TO user_name;
+GRANT ALL PRIVILEGES ON DATABASE test_messages TO apiuser;
 ```
 
 ## Running unit tests
