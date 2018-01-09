@@ -1,4 +1,3 @@
-import sys
 from web import create_app
 
 app = create_app("config", debug=False)

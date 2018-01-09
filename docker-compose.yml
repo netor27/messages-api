@@ -5,7 +5,7 @@ web:
   links:
     - database
   ports:
-    - "5000"
+    - "5000:5000"
 
 database:
   image: postgres
