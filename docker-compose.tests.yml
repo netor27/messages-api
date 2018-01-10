@@ -20,6 +20,9 @@ services:
     links:
       - database
       - web
+    volumes:
+      - ./coverageReport/:/coverageReport/
+    
   database:
     image: postgres
     restart: always
@@ -29,4 +32,5 @@ services:
       POSTGRES_DB: test_messages
     expose:
       - 5432
-      
+
+

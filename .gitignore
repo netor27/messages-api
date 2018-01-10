@@ -6,6 +6,9 @@ __pycache__/
 # C extensions
 *.so
 
+# Coverage report directory mounted from docker
+coverageReport/
+
 # Distribution / packaging
 .Python
 env/
