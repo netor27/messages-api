@@ -42,7 +42,6 @@ class InitialTests(TestCase):
             url_for('api.messagelistresource', _external=True),
             headers=self.get_accept_content_type_headers())
         self.assertTrue(response.status_code == status.HTTP_401_UNAUTHORIZED)
-        self.assertTrue(False)
 
     # def create_user(self, name, password):
     #     url = url_for('api.userlistresource', _external=True)
