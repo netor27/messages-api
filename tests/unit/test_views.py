@@ -290,3 +290,75 @@ class InitialTests(TestCase):
         get_response_data = json.loads(get_response.get_data(as_text=True))
         self.assertEqual(get_response.status_code, status.HTTP_200_OK)
         self.assertEqual(get_response_data['name'], new_user_name)
+
+    def test_retrieve_users_list(self):
+        """
+        Ensure we can retrieve the users paginated list
+        """
+        create_user_response = self.create_user(self.test_user_name, self.test_user_password)
+        self.assertEqual(create_user_response.status_code, status.HTTP_201_CREATED)
+
+        for i in range(6):
+            new_user_name = 'integrationTestUser{}'.format(i) 
+            new_user_password = 'Password1!.{}'.format(i)
+            post_response = self.create_user(new_user_name, new_user_password)
+            self.assertEqual(post_response.status_code, status.HTTP_201_CREATED, json.loads(post_response.get_data(as_text=True)))
+
+        self.assertEqual(User.query.count(), 7)
+
+        get_first_page_url = url_for('api.userlistresource', _external=True)
+        get_first_page_response = self.test_client.get(
+            get_first_page_url,
+            headers=self.get_authentication_headers(self.test_user_name, self.test_user_password))
+        get_first_page_response_data = json.loads(get_first_page_response.get_data(as_text=True))
+        self.assertEqual(get_first_page_response.status_code, status.HTTP_200_OK, json.loads(get_first_page_response.get_data(as_text=True)))
+        self.assertEqual(get_first_page_response_data['count'], 7)
+        self.assertIsNone(get_first_page_response_data['previous'])
+        self.assertEqual(get_first_page_response_data['next'], url_for('api.userlistresource', page=2))
+        self.assertIsNone(get_first_page_response_data['previous'])
+        self.assertIsNotNone(get_first_page_response_data['results'])
+        self.assertEqual(len(get_first_page_response_data['results']), 5    )
+        self.assertEqual(get_first_page_response_data['results'][0]['name'], self.test_user_name)
+        get_second_page_url = url_for('api.userlistresource', page=2)
+        get_second_page_response = self.test_client.get(
+            get_second_page_url,
+            headers=self.get_authentication_headers(self.test_user_name, self.test_user_password))
+        get_second_page_response_data = json.loads(get_second_page_response.get_data(as_text=True))
+        self.assertEqual(get_second_page_response.status_code, status.HTTP_200_OK, json.loads(get_first_page_response.get_data(as_text=True)))
+        self.assertIsNotNone(get_second_page_response_data['previous'])
+        self.assertEqual(get_second_page_response_data['previous'], url_for('api.userlistresource', page=1))
+        self.assertIsNone(get_second_page_response_data['next'])
+        self.assertIsNotNone(get_second_page_response_data['results'])
+        self.assertEqual(len(get_second_page_response_data['results']), 2)
+
+    # def test_delete_message(self):
+    #     """
+    #     Ensure we can delete a single message
+    #     """
+    #     create_user_response = self.create_user(self.test_user_name, self.test_user_password)
+    #     self.assertEqual(create_user_response.status_code, status.HTTP_201_CREATED)
+    #     new_message_message = 'Welcome to the IoT world'
+    #     new_message_category = 'Information'
+    #     post_response = self.create_message(new_message_message, 15, new_message_category)
+    #     self.assertEqual(post_response.status_code, status.HTTP_201_CREATED)
+    #     self.assertEqual(Message.query.count(), 1)
+    #     # The message should have created a new catagory
+    #     self.assertEqual(Category.query.count(), 1)
+    #     post_response_data = json.loads(post_response.get_data(as_text=True))
+    #     self.assertEqual(post_response_data['message'], new_message_message)
+    #     new_message_url = post_response_data['url']
+    #     print(new_message_url)
+    #     headers = self.get_authentication_headers(self.test_user_name, self.test_user_password)
+    #     print(headers)
+    #     data = {"id": post_response_data["id"]}
+    #     print(data)
+    #     delete_response = self.test_client.delete(
+    #         new_message_url, 
+    #         data=json.dumps(data),
+    #         headers=headers)
+    #     print(delete_response)
+    #     self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
+    #     get_response = self.test_client.get(
+    #         new_message_url,
+    #         headers=self.get_authentication_headers(self.test_user_name, self.test_user_password))
+    #     self.assertEqual(get_response.status_code, status.HTTP_404_NOT_FOUND)

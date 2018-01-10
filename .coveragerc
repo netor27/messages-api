@@ -1,3 +1,6 @@
 [run]
 cover_pylib = False
-data_file = /usr/src/app/.coverage
+
+# For docker containers
+# data_file = /usr/src/app/.coverage
+
