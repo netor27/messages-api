@@ -1,5 +1,25 @@
 version: "2"
 services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - database    
+    links:
+      - database
+    ports:
+      - "5000:5000"
+  web-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.tests
+    depends_on:
+      - database
+      - web
+    links:
+      - database
+      - web
   database:
     image: postgres
     restart: always
@@ -9,14 +29,4 @@ services:
       POSTGRES_DB: test_messages
     expose:
       - 5432
-  web-tests:
-    build:
-      context: .
-      dockerfile: Dockerfile.tests
-    depends_on:
-      - database
-    links:
-      - database
-    ports:
-      - "5000:5000"
-    command: ["./wait-for-it.sh", "database:5432", "--", "pytest", "--cov=web/ tests"]
+      

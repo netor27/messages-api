@@ -1,5 +1,4 @@
 sudo: required
-#install: true
 
 language: python
 cache: pip
@@ -9,13 +8,7 @@ python:
 - '3.6-dev'
 
 services: docker
-
-#before_install:
-#  - sudo service postgresql stop # stop built-in postgres service, so the one in the db container can bind to port 5432 properly
-#  - while sudo lsof -Pi :5432 -sTCP:LISTEN -t; do sleep 1; done # wait for postgresql to shutdown
-
-install: docker-compose -f docker-compose.tests.yml build
-
+install: docker-compose -f docker-compose.tests.yml -p ci build
 script: 
-- docker-compose -f docker-compose.tests.yml run test
-- /bin/bash -c "curl -s https://codecov.io/env -o cc_env.sh; bash cc_env.sh; python -m pytest --cov=web/ tests; curl -s https://codecov.io/bash -o cc_bash.sh; bash cc_bash.sh -t 3f3db595-a52d-4a08-8707-abab11425024"
+- docker-compose -f docker-compose.tests.yml -p ci run web-tests ./wait-for-it.sh database:5432 -- python -m pytest --cov=web/ tests
+- docker-compose -f docker-compose.tests.yml -p ci run web-tests ./wait-for-it.sh database:5432 -- /bin/bash -c "curl -s https://codecov.io/env -o cc_env.sh; bash cc_env.sh; python -m pytest --cov=web/ tests; curl -s https://codecov.io/bash -o cc_bash.sh; bash cc_bash.sh -t 3f3db595-a52d-4a08-8707-abab11425024"
