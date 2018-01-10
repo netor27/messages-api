@@ -2,5 +2,5 @@
 cover_pylib = False
 
 # For docker containers
-# data_file = /usr/src/app/.coverage
+data_file = /usr/src/app/.coverage
 
