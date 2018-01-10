@@ -5,4 +5,4 @@ install:
 - docker-compose -f docker-compose.tests.yml -p ci build
 script: 
 - docker-compose -f docker-compose.tests.yml -p ci run web-tests ./wait-for-it.sh database:5432 -- python -m pytest --cov=web/ tests
-- docker-compose -f docker-compose.tests.yml -p ci run web-tests /bin/bash -c "cd /coverageReport/; ls; curl -s https://codecov.io/env -o cc_env.sh; bash cc_env.sh; curl -s https://codecov.io/bash -o cc_bash.sh; bash cc_bash.sh -t 3f3db595-a52d-4a08-8707-abab11425024"
+- docker-compose -f docker-compose.tests.yml -p ci run web-tests /bin/bash -c "curl -s https://codecov.io/env -o cc_env.sh; bash cc_env.sh; curl -s https://codecov.io/bash -o cc_bash.sh; bash cc_bash.sh -t 3f3db595-a52d-4a08-8707-abab11425024"
