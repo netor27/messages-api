@@ -21,7 +21,7 @@ services:
       - database
       - web
     volumes:
-      - ./coverageReport/:/coverageReport/
+      - ./:/usr/src/app
     
   database:
     image: postgres
