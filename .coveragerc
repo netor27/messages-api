@@ -1,3 +1,3 @@
 [run]
 cover_pylib = False
-data_file = /coverageReport/.coverage
+data_file = /usr/src/app/.coverage
