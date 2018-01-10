@@ -8,7 +8,7 @@ from unittest import TestCase
 
 class InitialTests(TestCase):
     def setUp(self):
-        self.app = create_app('config')
+        self.app = create_app('configtest')        
         self.test_client = self.app.test_client()
         self.app_context = self.app.app_context()
         self.app_context.push()

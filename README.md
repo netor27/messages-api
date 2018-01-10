@@ -17,10 +17,23 @@ Python/Flask simple web api. This API manage the following resources:
 Install [docker](https://docs.docker.com/engine/installation/) and run:
 
 ```shell
-docker-compose up
+docker-compose build
+docker-compose up -d
 ```
 
+Initialize the postgre cointainer with the messages schema
+```shell
+docker-compose run web python3 migrate.py db upgrade
+```
+
+
 Visit [http://localhost:5000](http://localhost:5000)
+
+* To stop the containers
+
+```shell
+docker-compose down
+```
 
 ## Start the standalone service
 
@@ -33,7 +46,7 @@ sudo -u postgres -i
 ```
 * Run the psql client and create a new user with a role to manage the new db. (set 'apiuser' to your user, 'password' to your password and 'messages' to your database name)
 
-```
+```shell
 psql
 
 CREATE ROLE apiuser WITH LOGIN PASSWORD 'password';
@@ -45,14 +58,21 @@ ALTER USER apiuser CREATEDB;
 
 * Update the contents of config.py with the values for your database name, database user, database host. The current values are used for docker images
 
-* Initialize the db via migration
-```
+* Initialize the db via migration from flask
+
+```shell
 python migrate.py db upgrade
+```
+
+* Only if there are changes in the models that are not present on the migrations scripts, the following command must be executed to update the migration scripts
+
+```shell
 python migrate.py db migrate
 ```
 
+
 ### Running the service
-* Install the requirements and runn the app
+* Install the requirements and run the app
 
 ```shell
 pip install -r requirements.txt
@@ -63,11 +83,11 @@ Visit [http://localhost:5000](http://localhost:5000)
 ## Development
 
 * Create a branch for features or fixes.
-* After making changes rebuild the docker images and run the app.
+* After making changes rebuild the docker images and run the containers.
 
 ```shell
 docker-compose build
-docker-compose run -p 5000:5000 web python app.py
+docker-compose up -d
 ```
 
 ## Tests
@@ -88,14 +108,15 @@ docker-compose -f docker-compose.tests.yml -p ci run test python -m pytest --cov
 #### Setting up the test database
 
 * Create a database in PostgreSQL, login as the default user (set 'test_mesages' to your desired new db name)
-```
+
+```shell
 sudo -u postgres createdb 'test_messages'
 sudo -u postgres -i
 ```
 
 * Run the psql client and set the privileges to our previously created user to manage the new db. 
 
-```
+```shell
 psql
 
 GRANT ALL PRIVILEGES ON DATABASE test_messages TO apiuser;

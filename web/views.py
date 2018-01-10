@@ -10,8 +10,6 @@ from .models import db, Category, CategorySchema, Message, MessageSchema, User, 
 from .helpers import PaginationHelper
 
 auth = HTTPBasicAuth()
-
-
 @auth.verify_password
 def verify_user_password(name, password):
     user = User.query.filter_by(name=name).first()
@@ -19,26 +17,18 @@ def verify_user_password(name, password):
         return False
     g.user = user
     return True
-
-
 class AuthRequiredResource(Resource):
     method_decorators = [auth.login_required]
-
-
 api_bp = Blueprint('api', __name__)
 category_schema = CategorySchema()
 message_schema = MessageSchema()
 user_schema = UserSchema()
 api = Api(api_bp)
-
-
 class UserResource(AuthRequiredResource):
     def get(self, id):
         user = User.query.get_or_404(id)
         result = user_schema.dump(user).data
         return result
-
-
 class UserListResource(Resource):
     @auth.login_required
     def get(self):
@@ -50,7 +40,6 @@ class UserListResource(Resource):
             schema=user_schema)
         result = pagination_helper.paginate_query()
         return result
-
     def post(self):
         request_dict = request.get_json()
         if not request_dict:
@@ -79,14 +68,11 @@ class UserListResource(Resource):
             db.session.rollback()
             resp = {"error": str(e)}
             return resp, status.HTTP_400_BAD_REQUEST
-
-
 class MessageResource(AuthRequiredResource):
     def get(self, id):
         message = Message.query.get_or_404(id)
         result = message_schema.dump(message).data
         return result
-
     def patch(self, id):
         message = Message.query.get_or_404(id)
         message_dict = request.get_json(force=True)
@@ -116,7 +102,7 @@ class MessageResource(AuthRequiredResource):
                 db.session.rollback()
                 resp = {"error": str(e)}
                 return resp, status.HTTP_400_BAD_REQUEST
-         
+       
     def delete(self, id):
         message = Message.query.get_or_404(id)
         try:
@@ -127,8 +113,6 @@ class MessageResource(AuthRequiredResource):
                 db.session.rollback()
                 resp = jsonify({"error": str(e)})
                 return resp, status.HTTP_401_UNAUTHORIZED
-
-
 class MessageListResource(AuthRequiredResource):
     def get(self):
         pagination_helper = PaginationHelper(
@@ -139,7 +123,6 @@ class MessageListResource(AuthRequiredResource):
             schema=message_schema)
         result = pagination_helper.paginate_query()
         return result
-
     def post(self):
         request_dict = request.get_json()
         if not request_dict:
@@ -173,14 +156,11 @@ class MessageListResource(AuthRequiredResource):
             db.session.rollback()
             resp = {"error": str(e)}
             return resp, status.HTTP_400_BAD_REQUEST
-
-
 class CategoryResource(AuthRequiredResource):
     def get(self, id):
         category = Category.query.get_or_404(id)
         result = category_schema.dump(category).data
         return result
-
     def patch(self, id):
         category = Category.query.get_or_404(id)
         category_dict = request.get_json()
@@ -204,7 +184,7 @@ class CategoryResource(AuthRequiredResource):
                 db.session.rollback()
                 resp = {"error": str(e)}
                 return resp, status.HTTP_400_BAD_REQUEST
-         
+       
     def delete(self, id):
         category = Category.query.get_or_404(id)
         try:
@@ -215,14 +195,11 @@ class CategoryResource(AuthRequiredResource):
                 db.session.rollback()
                 resp = jsonify({"error": str(e)})
                 return resp, status.HTTP_401_UNAUTHORIZED
-
-
 class CategoryListResource(AuthRequiredResource):
     def get(self):
         categories = Category.query.all()
         results = category_schema.dump(categories, many=True).data
         return results
-
     def post(self):
         request_dict = request.get_json()
         if not request_dict:
