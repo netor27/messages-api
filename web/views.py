@@ -1,6 +1,6 @@
 from .status import status
 
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request, jsonify
 from flask_restful import Api, Resource
 from sqlalchemy.exc import SQLAlchemyError
 from flask_httpauth import HTTPBasicAuth
@@ -105,9 +105,11 @@ class MessageResource(AuthRequiredResource):
        
     def delete(self, id):
         message = Message.query.get_or_404(id)
+        print("deleting message with id ", id)
         try:
             delete = message.delete(message)
-            response = make_response()
+            response = {}
+            print("returning after delete ", response)
             return response, status.HTTP_204_NO_CONTENT
         except SQLAlchemyError as e:
                 db.session.rollback()
@@ -189,7 +191,7 @@ class CategoryResource(AuthRequiredResource):
         category = Category.query.get_or_404(id)
         try:
             category.delete(category)
-            response = make_response()
+            response = {}
             return response, status.HTTP_204_NO_CONTENT
         except SQLAlchemyError as e:
                 db.session.rollback()
