@@ -8,10 +8,12 @@ __pycache__/
 
 # Coverage report directory mounted from docker
 coverageReport/
+.coverage
 
 # Distribution / packaging
 .Python
 env/
+testenv/
 build/
 develop-eggs/
 dist/
