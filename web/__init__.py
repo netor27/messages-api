@@ -7,7 +7,7 @@ site = Blueprint('site', __name__)
 
 @site.route("/")
 def index():
-    html = "<h3>Hello world!, this is the index page of the messages-api</h3>"
+    html = "<h1>Hello world!</h1> <h3>The messages api is running...</h3><h3>Visit the swagger <a href='/apidocs'>apidocs</a><h3>"
     return html
 
 def create_app(config_filename, debug=True):
