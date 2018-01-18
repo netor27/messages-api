@@ -1,4 +1,5 @@
 from flask import Flask, Blueprint
+from flasgger import Swagger
 from .models import db
 from .views import api_bp
 
@@ -11,6 +12,7 @@ def index():
 
 def create_app(config_filename, debug=True):
     app = Flask(__name__)
+    Swagger(app)
     app.debug = debug
     app.config.from_object(config_filename)
     db.init_app(app)
